@@ -47,17 +47,18 @@
                 const element = document.createElement('div');
                 element.style.width = '100%';
                 element.appendChild(template_el.content.cloneNode(true));
-                getKeyData(key => {
-                    element.setAttribute("x-data", JSON.stringify({[bind_name]: key[index]}));
-                })
+                element.setAttribute("x-data", `{${bind_name}: ${raw_key}[${index}]}`);
                 return element;
             }
             let list = null;
             function updateList() {
                 getKeyData(key => {
+                    let top_offset = el.offsetTop;
+                    let win_height = window.screen.availHeight;
+                    console.log("updating virtual list with", key.length, "items, with a height of", win_height  - top_offset, "px (",win_height, "-", top_offset, ")")
                     let options = {
                         width: '100%',
-                        height: window.innerHeight - el.offsetTop ,
+                        height: win_height - top_offset,
                         itemHeight: 55, // aprox
                         generate: createElement,
                         total: key.length
